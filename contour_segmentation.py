@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-
+'''
 # Image Click Callback Function
 def click_callback(event, x, y, flags, param):
     if event == cv2.EVENT_LBUTTONDBLCLK:
@@ -53,3 +53,21 @@ cv2.waitKey(0)
 
 cv2.imshow('image', binary_segmented_image)
 cv2.waitKey(0)
+'''
+
+def contour_segment_image_point_in_polygon_grayscale(grayscale_input_image, interior_points):
+    # Get Image Contours
+    ret, thresh = cv2.threshold(grayscale_input_image, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    _, contours, _ = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    contour_bounding_hand = None
+    # Perform PIP Test
+    for c in range(len(contours)):
+        if (interior_points[0][0] > 0 or interior_points[0][1] > 0) and cv2.pointPolygonTest(contours[c], interior_points[0], False) >= 0 or \
+           (interior_points[1][0] > 0 or interior_points[1][1] > 0) and cv2.pointPolygonTest(contours[c], interior_points[1], False) >= 0 or \
+           (interior_points[2][0] > 0 or interior_points[2][1] > 0) and cv2.pointPolygonTest(contours[c], interior_points[2], False) >= 0:
+            contour_bounding_hand = contours[c]
+    if contour_bounding_hand is not None:
+        #cv2.drawContours(grayscale_input_image, [contour_bounding_hand], -1, (0, 255, 0), 3)
+        cv2.fillPoly(grayscale_input_image, pts=[contour_bounding_hand], color=(255, 255, 255))
+        return True
+    return False

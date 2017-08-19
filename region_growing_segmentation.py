@@ -56,7 +56,7 @@ def simple_region_growing(img, seed, threshold=1):
 
     return reg
 
-
+'''
 
 # Load Hand Image
 hand_image = cv.imread("hand.jpg")
@@ -85,3 +85,4 @@ out_img = simple_region_growing(cropped_finger_gray, hand_points_ground_truth_cr
 
 cv.imshow("Image", out_img)
 cv.waitKey(0)
+'''
